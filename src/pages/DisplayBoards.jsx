@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDocs, getFirestore, query } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, query } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -26,14 +26,29 @@ export default function DisplayBoards({workspaceID, boardList, id, setFlag, setP
         console.log(e)
     })
     }
+
+    const deleting = async (boardID)=>{
+        const db = getFirestore()
+        const res = doc(db,"workspaces",workspaceID, "boards", boardID);
+        await deleteDoc(res)
+        console.log("done")
+        navigate(`/home/${id}/${workspaceID}`)
+    }
+
+    function deleteBoard(boardID){
+        deleting(boardID)
+    }
     
     return (
         <div className="">
             {boardList.map((board)=>(
-                <div onClick={()=>goToBoardDetail(board.id)} className="float-left ml-10 mt-5 rounded shadow-2xl w-64 h-40 bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
-                    <h3 className="text-base leading-6 font-medium text-gray-900">
+                <div className="float-left ml-10 mt-5 rounded shadow-2xl w-64 h-40 bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
+                    <h3 onClick={()=>goToBoardDetail(board.id)}className="text-base leading-6 font-medium text-gray-900">
                         {board.data().title}
                     </h3>
+                    <button onClick={()=>deleteBoard(board.id)}>
+                        delete
+                    </button>
                 </div>
             ))}
             <div onClick={createBoard} className="float-left ml-10 mt-5 rounded shadow-2xl w-64 h-40 bg-slate-300 px-4 py-5 border-b border-gray-200 sm:px-6">

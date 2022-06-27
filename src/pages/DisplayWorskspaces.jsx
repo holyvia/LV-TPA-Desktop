@@ -1,6 +1,6 @@
 import { async } from "@firebase/util";
 import { query } from "firebase/database";
-import { addDoc, arrayUnion, collection, doc, getDocs, getFirestore, updateDoc, where } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, deleteDoc, doc, getDocs, getFirestore, updateDoc, where } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -55,6 +55,19 @@ export default function DisplayWorkspaces({workspaceList, id, setFlag}){
         subAddMember(newMemberEmail)
         setMemberAddFlag(true)
     } 
+
+    const deleting = async (workspaceID)=>{
+        const db = getFirestore()
+        const res = doc(db,"workspaces",workspaceID);
+        await deleteDoc(res)
+        console.log("done")
+        navigate(`/home/${id}`)
+    }
+
+    function deleteWorkspace(workspaceID){
+        deleting(workspaceID)
+    }
+
     const subAddMember = async (newMemberEmail)=>{
         const queryStatement = query(collection(db, "users"), where("email", "==", newMemberEmail))
         let getQuery = await getDocs(queryStatement)
@@ -95,10 +108,13 @@ export default function DisplayWorkspaces({workspaceList, id, setFlag}){
                 let cekIsMember = isMember(workspace)
                 if(workspace.data().visibility=="Public" || (workspace.data().visibility=="Private"&& (workspace.data().adminID==id||workspace.data().memberList.includes(id)))){
                     return(
-                        <div onClick={()=>goToBoardGallery(workspace.id)} className="float-left ml-10 mt-5 rounded shadow-2xl w-64 h-40 bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
-                            <h3 className="text-base leading-6 font-medium text-gray-900">
+                        <div className="float-left ml-10 mt-5 rounded shadow-2xl w-64 h-40 bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
+                            <h3 onClick={()=>goToBoardGallery(workspace.id)} className="text-base leading-6 font-medium text-gray-900">
                                 {workspace.data().title}
                             </h3>
+                            <button onClick={()=>deleteWorkspace(workspace.id)}>
+                                delete
+                            </button>
                         </div>
                     )
                 }

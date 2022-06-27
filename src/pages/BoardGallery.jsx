@@ -73,6 +73,9 @@ export default function BoardGallery(){
         console.log(admin)
     }
 
+    
+    
+
     useEffect(()=>{
         // handleGetMembers()
         console.log(workspaceID)
@@ -153,10 +156,6 @@ export default function BoardGallery(){
 
                         <a href="" onClick={toAddMember}class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
                         Add Member
-                        </a>
-
-                        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
-                        Closed Board
                         </a>
                     </nav>
                     </div>
