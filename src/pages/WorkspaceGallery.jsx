@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Navbar from "./navbar";
 import {useParams} from "react-router-dom"
 import { collection, getDocs, getFirestore, onSnapshot, query, where } from "firebase/firestore";
@@ -26,6 +26,7 @@ export default function WorkspaceGallery(){
     const [workspacePrivate, setWorkspacePrivate] = useState([])
     const[flag,setFlag] = useState(0)
     const navigate = useNavigate()
+    const searchRef = useRef()
     useEffect(() => {
         handleGetWorkspace()
         // console.log("here")
@@ -35,6 +36,20 @@ export default function WorkspaceGallery(){
         navigate(`/notif/${id}`)
     }
 
+    const searching = async()=>{
+        const db = getFirestore()
+        const queryStatement = query(collection(db, "workspaces"), where("title","==",searchRef.current.value)) 
+        let tempWorkspace = []
+        let tempWorkspacePrivate = []
+        let getQuery = await getDocs(queryStatement)
+        getQuery.forEach((e) => {
+            tempWorkspace.push(e)
+            // console.log(tempWorkspace)
+            setWorkspaceList(tempWorkspace)
+            // console.log(e)
+        })
+        setFlag(0)
+    }
     const handleGetWorkspace = async () => {
         const db = getFirestore()
         const queryStatement = query(collection(db, "workspaces")) 
@@ -56,6 +71,8 @@ export default function WorkspaceGallery(){
     return (
         <React.Fragment>
             <Navbar id={id}/>
+            
+            
             <div className="flex min-h-screen">
                 <div className="hidden md:flex md:flex-shrink-0 ">
                 <div className="flex flex-col w-64 ">
@@ -71,7 +88,12 @@ export default function WorkspaceGallery(){
                     </div>
                 </div>
                 </div>
+                <div>
+                <input type="text" name="" id="" ref={searchRef} placeholder="search"/>
+                <button onClick={searching}>Search</button>
                 <DisplayWorkspaces workspaceList={workspaceList} id={id} setFlag={setFlag}/>
+                </div>
+                
             </div>
             
         </React.Fragment>   

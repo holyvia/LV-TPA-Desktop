@@ -32,7 +32,7 @@ export default function BoardGallery(){
         console.log(admin)
         console.log(id)
         if(admin == id){
-            navigate(`/seeMember/${id}/${workspaceID}`)
+            navigate(`/addMember/${id}/${workspaceID}`)
         }
         else{
             alert("you're not an admin")

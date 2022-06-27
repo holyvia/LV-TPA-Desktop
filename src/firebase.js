@@ -6,12 +6,12 @@ import { getDatabase } from "firebase/database";
 import { getFirestore } from "firebase/firestore";
 
 const app = firebase.initializeApp({
-  apiKey: "AIzaSyBbol2sbCfQaw8EoZvipNRIMivhQi_4dpE",
-  authDomain: "chello4.firebaseapp.com",
-  projectId: "chello4",
-  storageBucket: "chello4.appspot.com",
-  messagingSenderId: "463324528454",
-  appId: "1:463324528454:web:3a62c09ef144478601af47"
+  apiKey: "AIzaSyDrnXRKuGV4nvgPF0-8yMaQeIltU-Prwas",
+  authDomain: "newchello-1dcbe.firebaseapp.com",
+  projectId: "newchello-1dcbe",
+  storageBucket: "newchello-1dcbe.appspot.com",
+  messagingSenderId: "563861028484",
+  appId: "1:563861028484:web:ca1d092327b854c2fcccd1"
 })
 
 export const auth = app.getAuth

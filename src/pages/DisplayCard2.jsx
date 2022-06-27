@@ -51,27 +51,61 @@ export default function DisplayCard2 ({workspaceID, boardID, listID, cardList, i
         return (
             <div className="">
             
-                {cardList.map((card)=>(
-                    <div onClick={()=>{
-                        console.log("click")
-                        setCardTitle(card.data().title)
-                        setCardDesc(card.data().description)
-                        setCardID(card.id)
-                        setListID(listID)
-                        setClassStyle("fixed z-10 inset-0 overflow-y-auto")
-                    }
-                    
-                    } className="bg-slate-300 opacity-75 ml-1 mt-4 rounded shadow-m w-37 h-content-fit px-4 py-5 border-b border-gray-200 sm:px-6">
-                        <h4 className="text-lg leading-6 font-small text-gray-900">
-                            {card.data().title}
-                        </h4>
-                        <div className="bg-white opacity-75 ml-1 mt-4 rounded shadow-m w-37 h-content-fit">
+                {cardList.map((card)=>{
+                    if(card.data().checkList==true)
+                    return(
+                        <div onClick={()=>{
+                            console.log("click")
+                            setCardTitle(card.data().title)
+                            setCardDesc(card.data().description)
+                            setCardID(card.id)
+                            setListID(listID)
+                            setClassStyle("fixed z-10 inset-0 overflow-y-auto")
+                        }
+                        
+                        } className="bg-slate-300 opacity-75 ml-1 mt-4 rounded shadow-m w-37 h-content-fit px-4 py-5 border-b border-gray-200 sm:px-6">
+                            <div>
+                            <input type="checkbox" name="" id=""/>
+                            <h4 className="text-lg leading-6 font-small text-gray-900">
+                                {card.data().title}
+                            </h4>
+                            </div>
+                            <div className="bg-white opacity-75 ml-1 mt-4 rounded shadow-m w-37 h-content-fit">
+                            </div>
+                            <button className="bg-white">
+                                + comment
+                            </button>
                         </div>
-                        <button className="bg-white">
-                            + comment
-                        </button>
-                    </div>
-                ))}
+                    )
+                    else{
+                        return(
+                            <div onClick={()=>{
+                                console.log("click")
+                                setCardTitle(card.data().title)
+                                setCardDesc(card.data().description)
+                                setCardID(card.id)
+                                setListID(listID)
+                                setClassStyle("fixed z-10 inset-0 overflow-y-auto")
+                            }
+                            
+                            } className="bg-slate-300 opacity-75 ml-1 mt-4 rounded shadow-m w-37 h-content-fit px-4 py-5 border-b border-gray-200 sm:px-6">
+                                <div>
+                                <h4 className="text-lg leading-6 font-small text-gray-900">
+                                    {card.data().title}
+                                </h4>
+                                </div>
+                                <div className="bg-white opacity-75 ml-1 mt-4 rounded shadow-m w-37 h-content-fit">
+                                </div>
+                                <button className="bg-white">
+                                    + comment
+                                </button>
+                            </div>
+                        )
+                    }
+                }
+                
+                    
+                )}
                 <div  className="bg-slate-300 opacity-75 ml-1 mt-4 rounded shadow-m w-37 h-content-fit px-4 py-5 border-b border-gray-200 sm:px-6">
                 <input id="cardTitle" ref={cardTitleRef} name="cardTitle" type="cardTitle" autocomplete="cardTitle" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="input card title"/>
                         <button onClick={createCard} className="bg-white">

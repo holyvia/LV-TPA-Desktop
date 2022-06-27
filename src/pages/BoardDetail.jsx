@@ -17,6 +17,7 @@ export default function BoardDetail(){
     const [cardID, setCardID] = useState()
     const [listID, setListID] = useState()
 
+
     const [listList, setListList] = useState([])
     let cardList = []
     const [tempCard2, setTempCard2] = useState([])
@@ -24,23 +25,43 @@ export default function BoardDetail(){
 
     //for button extend
     const [classLabelButtonExtend, setClassLabelButtonExtend] = useState("hidden")
+    const [classChecklistButtonExtend, setClassChecklistButtonExtend] = useState("hidden")
+    const [classDateExtend, setClassDateExtend] = useState("hidden")
     const labelTypeRef = useRef()
+    const dueDateRef = useRef()
+    const [checkList, setCheckList] = useState(false)
 
 
     function extendLabel(){
         if(classLabelButtonExtend=="hidden")
-        setClassLabelButtonExtend("block")
+        setClassLabelButtonExtend("w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm")
         else{
             setClassLabelButtonExtend("hidden")
         }
     }
 
+    function extendChecklist(){
+        if(classChecklistButtonExtend=="hidden fixed z-10 inset-0 overflow-y-auto")
+        setClassChecklistButtonExtend("fixed z-10 inset-0 overflow-y-auto")
+        else
+        setClassChecklistButtonExtend("hidden fixed z-10 inset-0 overflow-y-auto")
+    }
+
+    function extendDate(){
+        if(classDateExtend=="hidden")
+        setClassDateExtend("block")
+        else{
+            setClassDateExtend("hidden")
+        }
+    }
+
+
     const navigation = [
-        { name: 'Labels', href: '#', icon: BookmarkIcon, current: false, isClick: 2, callFunction:extendLabel },
-        { name: 'Checklist', href: '#', icon: CheckCircleIcon, current: false, isClick: 3,  callFunction:extendLabel  },
-        { name: 'Dates', href: '#', icon: ClockIcon, current: false, isClick: 4,  callFunction:extendLabel  },
-        { name: 'Attachment', href: '#', icon: LinkIcon, current: false, isClick: 5, callFunction:extendLabel  },
-        { name: 'Location', href: '#', icon: LocationMarkerIcon, current: false, isClick: 6, callFunction:extendLabel  },
+        { name: 'Labels', icon: BookmarkIcon, current: false, isClick: 2, callFunction:extendLabel },
+        { name: 'Checklist', icon: CheckCircleIcon, current: false, isClick: 3,  callFunction:extendChecklist  },
+        { name: 'Dates', icon: ClockIcon, current: false, isClick: 4,  callFunction:extendDate  },
+        { name: 'Attachment', icon: LinkIcon, current: false, isClick: 5, callFunction:extendLabel  },
+        { name: 'Location', icon: LocationMarkerIcon, current: false, isClick: 6, callFunction:extendLabel  },
     ]
     const handleGetLists = async () => {
         const db = getFirestore()
@@ -58,6 +79,15 @@ export default function BoardDetail(){
         cardList.push(tempCard2)
         setTempCard2([])
     }
+
+    function addChecklist(){
+        if(checkList==false){
+            setCheckList(true)
+        }
+        else{
+            setCheckList(false)
+        }
+    }
     
     const  updateCard = async ()=>{
         console.log(cardID+"asd")
@@ -66,7 +96,9 @@ export default function BoardDetail(){
         await updateDoc(document, {
             title:cardTitle,
             description:cardDesc,
-            label:labelTypeRef.current.value
+            label:labelTypeRef.current.value,
+            checkList:checkList,
+            duedate:dueDateRef.current.value
         }).then(console.log("success"))
         setClassStyle("hidden fixed z-10 inset-0 overflow-y-auto")
     }
@@ -80,10 +112,7 @@ export default function BoardDetail(){
     }
 
     useEffect(()=>{
-        handleGetLists().then(()=>{
-            
-        })
-        
+        handleGetLists()
     }, [])
 
     const unsub = onSnapshot(
@@ -171,6 +200,12 @@ export default function BoardDetail(){
                                     <option value="Urgent">Urgent</option>
                                 </select>
                             </div>
+                        </div>
+                        <button type="button" onClick={addChecklist}class={classChecklistButtonExtend}>
+                            add checklist
+                        </button>
+                        <div>
+                            <input className={classDateExtend} type="text" name="" id="" placeholder="input date" ref={dueDateRef} />
                         </div>
                     </div>
                 </div>

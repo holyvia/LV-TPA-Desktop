@@ -14,23 +14,23 @@ function SignUp(){
     const auth = getAuth()
     const [uid, setUid] = useState()
     let navigate = useNavigate()
-    function handleSubmit(e){
-        e.preventDefault();
+    const handleSubmit = async(e)=>{
+        e.preventDefault()
         console.log(e.user)
-        createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
+        await createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
         .then(async e => {
             try {
                 setUid(e.user.uid)
                 const db = getFirestore()
                 const colls = collection(db, 'users')
-                if(uid!=undefined){
+                if(e.user.uid!=undefined){
                     const docRef = setDoc(doc(db, 'users', e.user.uid), {
                         uid: e.user.uid,
                         email: e.user.email, 
                         password: passwordRef.current.value,
                         myWorkspace:[]
                     }).then(() => 
-                        navigate(`/home/${uid}`))
+                        navigate(`/home/${e.user.uid}`))
                 }
             }
             catch(e){
